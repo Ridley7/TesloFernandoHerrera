@@ -5,6 +5,11 @@ import 'package:formz/formz.dart';
 import 'package:teslo/features/shared/infrastructure/inputs/email_input.dart';
 import 'package:teslo/features/shared/infrastructure/inputs/password_input.dart';
 
+final loginFormProvider = NotifierProvider<LoginFormNotifier, LoginFormState>(
+  LoginFormNotifier.new,
+);
+
+
 class LoginFormNotifier extends Notifier<LoginFormState> {
 
   @override
