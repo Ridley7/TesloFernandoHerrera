@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:teslo/features/shared/infrastructure/inputs/email_input.dart';
 import 'package:teslo/features/shared/infrastructure/inputs/password_input.dart';
+import 'package:teslo/presentation/providers/authentication_provider.dart';
 
 final loginFormProvider = NotifierProvider<LoginFormNotifier, LoginFormState>(
   LoginFormNotifier.new,
@@ -12,8 +13,12 @@ final loginFormProvider = NotifierProvider<LoginFormNotifier, LoginFormState>(
 
 class LoginFormNotifier extends Notifier<LoginFormState> {
 
+  late final Function(String, String) loginUserCallback;
+
   @override
   LoginFormState build() {
+
+    loginUserCallback = ref.read(authenticationProvider.notifier).login;
     return LoginFormState();
   }
 
@@ -46,13 +51,14 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
 
     if( !state.isValid ) return;
 
-    //TODO: Si el formulario es valido hay que subir la información
+    //Hacemos login contra el backend
+    await loginUserCallback(state.email.value, state.password.value);
 
   }
 
   void _touchEveryField(){
-    final email = state.email;
-    final password = state.password;
+    final email = EmailInput.dirty(state.email.value);
+    final password = PasswordInput.dirty(state.password.value);
 
     state = state.copyWith(
       email: email,
