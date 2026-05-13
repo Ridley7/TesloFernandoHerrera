@@ -6,7 +6,7 @@ import 'package:teslo/features/shared/infrastructure/inputs/email_input.dart';
 import 'package:teslo/features/shared/infrastructure/inputs/password_input.dart';
 import 'package:teslo/presentation/providers/authentication_provider.dart';
 
-final loginFormProvider = NotifierProvider<LoginFormNotifier, LoginFormState>(
+final loginFormProvider = NotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(
   LoginFormNotifier.new,
 );
 
@@ -53,6 +53,7 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
 
     //Hacemos login contra el backend
     await loginUserCallback(state.email.value, state.password.value);
+
 
   }
 

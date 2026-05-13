@@ -3,6 +3,8 @@ import 'package:teslo/features/auth/domain/entities/user.dart';
 import 'package:teslo/features/auth/domain/repositories/authentication_repository.dart';
 import 'package:teslo/features/auth/infrastructure/errors/custom_error.dart';
 import 'package:teslo/features/auth/infrastructure/repositories/authentication_repository_implementation.dart';
+import 'package:teslo/features/shared/infrastructure/services/key_value_storage_service.dart';
+import 'package:teslo/features/shared/infrastructure/services/key_value_storage_service_implementation.dart';
 
 //3. El provider que gestiona el notifier
 final authenticationProvider = NotifierProvider<AuthenticationNotifier, AuthenticationState>(
@@ -13,10 +15,13 @@ final authenticationProvider = NotifierProvider<AuthenticationNotifier, Authenti
 class AuthenticationNotifier extends Notifier<AuthenticationState>{
 
   late final AuthenticationRepository authenticationRepository;
+  late final KeyValueStorageService keyValueStorageService;
 
   @override
   AuthenticationState build() {
     authenticationRepository = AuthenticationRepositoryImplementation();
+    keyValueStorageService = KeyValueStorageServiceImplementation();
+    checkAuthenticationStatus();
     return const AuthenticationState();
   }
 
@@ -33,20 +38,43 @@ class AuthenticationNotifier extends Notifier<AuthenticationState>{
     } catch (e){
       logout("Error no controlado");
     }
-
-    print("State");
-    //print(state.user!.token);
-
   }
 
-  void _setLoggerUser(User user){
+  void checkAuthenticationStatus() async {
+
+    final String? token = await keyValueStorageService.getValue<String>('token');
+
+    //Devolvemos logout por que este metodo se ejecuta inmediamente que se llama
+    //este provider, en ese momento el AuthentiactionStatus es checking. Si
+    //el token no es valido llamamos a logout para que el AuthenticationStatus sea
+    //notAuthenticated
+    if(token == null) return logout();
+
+    //Si no es null, debemos comprobar el token contra el backend
+    try{
+      final User user = await authenticationRepository.checkAuthStatus(token);
+      _setLoggerUser(user);
+    } catch (e){
+      logout();
+    }
+  }
+
+  void _setLoggerUser(User user) async {
+
+    await keyValueStorageService.setKeyValue('token', user.token);
+
     state = state.copyWith(
         authenticationStatus: AuthenticationStatus.authenticated,
         user: user
     );
+
+
   }
 
   Future<void> logout([String? message]) async{
+
+    await keyValueStorageService.removeKey('token');
+
     state = state.copyWith(
       authenticationStatus: AuthenticationStatus.notAuthenticated,
       user: null,
