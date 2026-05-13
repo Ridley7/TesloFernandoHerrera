@@ -1,12 +1,21 @@
 import 'package:go_router/go_router.dart';
+import 'package:teslo/features/auth/presentation/screens/check_auth_status_screen.dart';
 import 'package:teslo/features/auth/presentation/screens/login_screen.dart';
 import 'package:teslo/features/auth/presentation/screens/register_screen.dart';
 import 'package:teslo/features/products/presentation/screens/products_screen.dart';
 
 
+
+
+
 final appRouter = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/',
   routes: [
+
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const CheckAuthStatusScreen(),
+    ),
 
     ///* Auth Routes
     GoRoute(
