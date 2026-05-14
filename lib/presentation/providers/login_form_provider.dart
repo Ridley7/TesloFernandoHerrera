@@ -51,8 +51,12 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
 
     if( !state.isValid ) return;
 
+    state = state.copyWith(isPosting: true);
+
     //Hacemos login contra el backend
     await loginUserCallback(state.email.value, state.password.value);
+
+    state = state.copyWith(isPosting: false);
 
 
   }
@@ -114,12 +118,3 @@ class LoginFormState{
 ''';
   }
 }
-
-/*
-Temario: word, excel, power point y access
-Horario: lunes a jueves - 18:30 - 21:00. Martes 19
-Duracion hasta el 25 de junio.
-Compatibilidad laboral: ninguno.
-Salario:
-Cuanto tardais en pagar:
- */

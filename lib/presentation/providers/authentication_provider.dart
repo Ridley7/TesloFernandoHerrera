@@ -65,7 +65,8 @@ class AuthenticationNotifier extends Notifier<AuthenticationState>{
 
     state = state.copyWith(
         authenticationStatus: AuthenticationStatus.authenticated,
-        user: user
+        user: user,
+      errorMessage: ''
     );
 
 

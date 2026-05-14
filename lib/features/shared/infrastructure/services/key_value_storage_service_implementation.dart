@@ -12,10 +12,10 @@ class KeyValueStorageServiceImplementation extends KeyValueStorageService{
     final SharedPreferences sharedPreferences = await getSharedPreferences();
     switch(T){
       case int:
-        return sharedPreferences.getInt(key) as T;
+        return sharedPreferences.getInt(key) as T?;
 
       case String:
-        return sharedPreferences.get(key) as T;
+        return sharedPreferences.getString(key) as T?;
 
         default:
           throw UnimplementedError('GET not implemented for type ${ T.runtimeType }');
