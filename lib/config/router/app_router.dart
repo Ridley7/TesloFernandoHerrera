@@ -63,8 +63,6 @@ final appRouterProvider = Provider((ref){
       final isGoingTo = state.matchedLocation;
       final authStatus = goRouterNotifier.authenticationStatus;
 
-      print("isGoingTo: $isGoingTo authStatus $authStatus");
-
       if( isGoingTo == "/splash" && authStatus == AuthenticationStatus.checking) return null;
 
       if(authStatus == AuthenticationStatus.notAuthenticated){
