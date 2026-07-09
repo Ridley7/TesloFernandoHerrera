@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductScreen extends ConsumerStatefulWidget {
+class ProductScreen extends ConsumerWidget {
   const ProductScreen({
     super.key,
     required this.productId
@@ -10,20 +10,15 @@ class ProductScreen extends ConsumerStatefulWidget {
   final String productId;
 
   @override
-  ProductScreenState createState() => ProductScreenState();
-}
-
-class ProductScreenState extends ConsumerState<ProductScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar producto"),
       ),
 
-      body: Center(
-        child: Text(widget.productId)
-      ),
+      body:Center(
+        child: Text(productId),
+      )
     );
   }
 }

@@ -4,24 +4,24 @@ import 'package:teslo/features/products/domain/entities/product.dart';
 import 'package:teslo/features/products/domain/respositories/products_repository.dart';
 
 //Este es el provider
-final productsProvider = NotifierProvider<ProductNotifier, ProductState>(
-  ProductNotifier.new
+final productsProvider = NotifierProvider<ProductsNotifier, ProductsState>(
+  ProductsNotifier.new
 );
 
 //Este es el notifier
-class ProductNotifier extends Notifier<ProductState>{
+class ProductsNotifier extends Notifier<ProductsState>{
 
   late final ProductsRepository productsRepository;
 
   @override
-  ProductState build() {
+  ProductsState build() {
 
-    productsRepository = ref.watch(productRepositoryProvider);
+    productsRepository = ref.watch(productsRepositoryProvider);
 
     // carga automática al crear el provider
     Future.microtask(() => loadNextPage());
 
-    return ProductState();
+    return ProductsState();
 
   }
 
@@ -63,14 +63,14 @@ class ProductNotifier extends Notifier<ProductState>{
 }
 
 //Este es el state
-class ProductState{
+class ProductsState{
     final bool isLastPage;
     final int limit;
     final int offset;
     final bool isLoading;
     final List<Product> products;
 
-  ProductState({
+  ProductsState({
     this.isLastPage = false,
     this.limit = 10,
     this.offset = 0,
@@ -78,13 +78,13 @@ class ProductState{
     this.products = const []
   });
 
-  ProductState copyWith({
+  ProductsState copyWith({
     bool? isLastPage,
     int? limit,
     int? offset,
     bool? isLoading,
     List<Product>? products,
-  }) => ProductState(
+  }) => ProductsState(
     isLastPage: isLastPage ?? this.isLastPage,
     limit: limit ?? this.limit,
     offset: offset ?? this.offset,
