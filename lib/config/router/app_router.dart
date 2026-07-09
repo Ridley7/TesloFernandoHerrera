@@ -7,6 +7,8 @@ import 'package:teslo/features/auth/presentation/screens/register_screen.dart';
 import 'package:teslo/features/products/presentation/screens/products_screen.dart';
 import 'package:teslo/presentation/providers/authentication_provider.dart';
 
+import '../../features/products/presentation/screens/product_screen.dart';
+
 /*
 Dado que queremos que el appRouter se encargue de los redireccionamientos
 y protección de rutas envolvemos el appRouter en un provider para darle
@@ -49,6 +51,13 @@ final appRouterProvider = Provider((ref){
         path: '/',
         builder: (context, state) => const ProductsScreen(),
       ),
+
+      GoRoute(
+        path: '/product/:id',
+        builder: (context, state) => ProductScreen(
+          productId: state.pathParameters['id'] ?? "no-id",
+        )
+      )
     ],
 
     redirect: (context, state){
