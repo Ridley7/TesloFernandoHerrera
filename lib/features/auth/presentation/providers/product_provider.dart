@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teslo/features/auth/presentation/providers/products_repository_provider.dart';
 import 'package:teslo/features/products/domain/entities/product.dart';
@@ -22,9 +24,29 @@ class ProductNotifier extends Notifier<ProductState>{
 
     productsRepository = ref.watch(productsRepositoryProvider);
 
-    //Aqui se ha de lanzar la carga del producto
+    //Esperamos a que build() haya terminado antes de modificar el estado
+    unawaited(Future.microtask(loadProduct));
 
-    return ProductState(id: productId);
+    //Aqui se ha de lanzar la carga del producto
+    return ProductState(
+        id: productId
+    );
+  }
+
+  Future<void> loadProduct() async {
+
+    try{
+      final product = await productsRepository.getProductById(productId);
+
+      state = state.copyWith(
+        isLoading: false,
+        product: product
+      );
+
+    } catch (e){
+      print(e);
+    }
+
   }
 
 }

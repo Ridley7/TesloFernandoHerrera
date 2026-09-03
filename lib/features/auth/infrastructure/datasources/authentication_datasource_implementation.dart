@@ -65,9 +65,14 @@ class AuthenticationDatasourceImplementation extends AuthenticationDatasource{
         throw CustomError("Revisar conexión a Internet");
       }
 
+      if(e.type == DioExceptionType.connectionError){
+        throw CustomError("Parece que el dispositivo no esta conectado a Internet");
+      }
+
       throw Exception();
 
     } catch (e) {
+
 
       throw Exception();
     }
